@@ -156,7 +156,7 @@ Memverifikasi...
 <script>
 
 const api =
-"https://script.google.com/macros/s/AKfycby6RGSRnFPLPTRBQ2XOE-vUk4nhlFexpMT1zM0UpMWfK95vtF4kGy1OI9hRIDcPrfY/exec";
+"https://script.google.com/macros/s/AKfycbwuCIi-40kfZDwvf0tC7M3E4Yl3g3S3HBcQG0ROEY9_JxBPl2BI_gzQrBDgIdz12E4owA/exec";
 
 const params = new URLSearchParams(window.location.search);
 const token = params.get("t");
@@ -166,8 +166,19 @@ console.log(token);
 fetch(api + "?t=" + token)
   .then(res => res.json())
   .then(data => {
+
     console.log(data);
+
+  })
+  .catch(error => {
+
+    console.error(error);
+
+    document.getElementById("hasil").innerHTML =
+      "<h2>❌ Gagal terhubung ke server</h2>";
+
   });
+    
 
     
 });
