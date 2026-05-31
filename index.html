@@ -161,7 +161,7 @@ const api =
 const params =
 new URLSearchParams(window.location.search);
 
-const id =
+const token =
 params.get("t");
 
 fetch(api + "?t=" + token)
@@ -195,11 +195,6 @@ document.getElementById("hasil").innerHTML = `
 <div class="row">
 <b>Nama Anggota</b><br>
 ${data.nama}
-</div>
-
-<div class="row">
-<b>ID Anggota</b><br>
-${data.id}
 </div>
 
 <div class="row">
