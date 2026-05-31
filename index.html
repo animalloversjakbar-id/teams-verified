@@ -12,58 +12,43 @@ fetch(api + "?t=" + encodeURIComponent(token))
   .then(res => res.json())
   .then(data => {
 
-    console.log("Response:", data);
+    console.log(data);
 
-    if(data.found){
+    if (data.found) {
 
       document.getElementById("hasil").innerHTML = `
+        <h2 class="valid">✅ Anggota Terverifikasi</h2>
 
-      <div class="success-animation">
+        <div class="info">
 
-      <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
-        <circle class="checkmark-circle" cx="26" cy="26" r="25" fill="none"/>
-        <path class="checkmark-check" fill="none" d="M14 27l7 7 17-17"/>
-      </svg>
+          <div class="row">
+            <b>Nama Anggota</b><br>
+            ${data.nama}
+          </div>
 
-      <h2 class="valid">Anggota Terverifikasi</h2>
+          <div class="row">
+            <b>ID Anggota</b><br>
+            ${data.id}
+          </div>
 
-      </div>
+          <div class="row">
+            <b>Status</b><br>
+            ${data.status}
+          </div>
 
-      <div class="info">
+          <div class="row">
+            <b>Waktu Verifikasi</b><br>
+            ${new Date().toLocaleString('id-ID')}
+          </div>
 
-      <div class="row">
-      <b>Nama Anggota</b><br>
-      ${data.nama}
-      </div>
-
-      <div class="row">
-      <b>ID Anggota</b><br>
-      ${data.id}
-      </div>
-
-      <div class="row">
-      <b>Status</b><br>
-      ${data.status}
-      </div>
-
-      <div class="row">
-      <b>Waktu Verifikasi</b><br>
-      ${new Date().toLocaleString('id-ID')}
-      </div>
-
-      </div>
+        </div>
       `;
 
     } else {
 
       document.getElementById("hasil").innerHTML = `
-      <h2 class="invalid">
-      ❌ Tidak Terdaftar
-      </h2>
-
-      <p>
-      Data anggota tidak ditemukan.
-      </p>
+        <h2 class="invalid">❌ Tidak Terdaftar</h2>
+        <p>Data anggota tidak ditemukan.</p>
       `;
 
     }
@@ -74,9 +59,7 @@ fetch(api + "?t=" + encodeURIComponent(token))
     console.error(error);
 
     document.getElementById("hasil").innerHTML = `
-      <h2 class="invalid">
-      ❌ Gagal Terhubung ke Server
-      </h2>
+      <h2 class="invalid">❌ Gagal Terhubung ke Server</h2>
       <p>${error.message}</p>
     `;
 
