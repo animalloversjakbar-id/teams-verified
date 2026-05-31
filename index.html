@@ -1,158 +1,3 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-
-<title>Verifikasi ALJABAR</title>
-
-<style>
-
-h1{
-    margin:0;
-    color:#1e3a8a;
-    font-size:32px;
-    line-height:1.2;
-}
-
-.subtitle{
-    font-size:16px;
-    font-weight:400;
-    color:#64748b;
-}
-
-  
-  
-
-body{
-margin:0;
-background:#f4f7fb;
-font-family:Segoe UI,sans-serif;
-display:flex;
-justify-content:center;
-align-items:center;
-height:100vh;
-}
-
-.card{
-width:90%;
-max-width:500px;
-background:white;
-padding:40px;
-border-radius:20px;
-box-shadow:0 10px 40px rgba(0,0,0,.1);
-text-align:center;
-}
-
-.logo{
-font-size:28px;
-font-weight:bold;
-margin-bottom:20px;
-}
-
-.valid{
-color:#16a34a;
-}
-
-.invalid{
-color:#dc2626;
-}
-
-.info{
-margin-top:20px;
-text-align:left;
-}
-
-.row{
-padding:12px;
-border-bottom:1px solid #eee;
-
-}
-
-
-.success-animation{
-    text-align:center;
-    margin-bottom:20px;
-}
-
-
-.checkmark{
-    filter:
-    drop-shadow(0 0 8px rgba(34,197,94,.5))
-    drop-shadow(0 0 20px rgba(34,197,94,.3));
-}
-.checkmark{
-    width:100px;
-    height:100px;
-    display:block;
-    margin:0 auto 15px;
-}
-
-.checkmark-circle{
-    stroke:#22c55e;
-    stroke-width:2;
-    stroke-miterlimit:10;
-    stroke-dasharray:166;
-    stroke-dashoffset:166;
-    animation:stroke 0.8s ease forwards;
-}
-
-.checkmark-check{
-    stroke:#22c55e;
-    stroke-width:3;
-    stroke-linecap:round;
-    stroke-linejoin:round;
-    stroke-dasharray:48;
-    stroke-dashoffset:48;
-    animation:stroke 0.4s ease forwards 0.8s;
-}
-
-@keyframes stroke{
-    to{
-        stroke-dashoffset:0;
-    }
-}
-
-
-
-
-.logo-container{
-    text-align:center;
-    margin-bottom:20px;
-}
-
-.logo-container img{
-    width:120px;
-    height:auto;
-}
-  
-
-</style>
-
-</head>
-
-<body>
-
-<div class="card">
-
-<div class="logo-container">
-    <img src="Logo Aljabar - Stoke.png" alt="Logo ALJABAR">
-</div>
-  
-<h1>
-    ALJABAR<br>
-    <span class="subtitle">
-        (Animal Lovers Jakarta Barat)
-    </span>
-</h1>
-
-<div id="hasil">
-Memverifikasi...
-</div>
-
-</div>
-
 <script>
 
 const api =
@@ -161,91 +6,80 @@ const api =
 const params = new URLSearchParams(window.location.search);
 const token = params.get("t");
 
-console.log(token);
+console.log("Token:", token);
 
-fetch(api + "?t=" + token)
+fetch(api + "?t=" + encodeURIComponent(token))
   .then(res => res.json())
   .then(data => {
 
-    console.log(data);
+    console.log("Response:", data);
+
+    if(data.found){
+
+      document.getElementById("hasil").innerHTML = `
+
+      <div class="success-animation">
+
+      <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+        <circle class="checkmark-circle" cx="26" cy="26" r="25" fill="none"/>
+        <path class="checkmark-check" fill="none" d="M14 27l7 7 17-17"/>
+      </svg>
+
+      <h2 class="valid">Anggota Terverifikasi</h2>
+
+      </div>
+
+      <div class="info">
+
+      <div class="row">
+      <b>Nama Anggota</b><br>
+      ${data.nama}
+      </div>
+
+      <div class="row">
+      <b>ID Anggota</b><br>
+      ${data.id}
+      </div>
+
+      <div class="row">
+      <b>Status</b><br>
+      ${data.status}
+      </div>
+
+      <div class="row">
+      <b>Waktu Verifikasi</b><br>
+      ${new Date().toLocaleString('id-ID')}
+      </div>
+
+      </div>
+      `;
+
+    } else {
+
+      document.getElementById("hasil").innerHTML = `
+      <h2 class="invalid">
+      ❌ Tidak Terdaftar
+      </h2>
+
+      <p>
+      Data anggota tidak ditemukan.
+      </p>
+      `;
+
+    }
 
   })
   .catch(error => {
 
     console.error(error);
 
-    document.getElementById("hasil").innerHTML =
-      "<h2>❌ Gagal terhubung ke server</h2>";
+    document.getElementById("hasil").innerHTML = `
+      <h2 class="invalid">
+      ❌ Gagal Terhubung ke Server
+      </h2>
+      <p>${error.message}</p>
+    `;
 
   });
-    
-
-    
-});
-.then(res => res.json())
-
-.then(data => {
-
-if(data.found){
-
-document.getElementById("hasil").innerHTML = `
-
-<div class="success-animation">
-
-<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
-  <circle class="checkmark-circle" cx="26" cy="26" r="25" fill="none"/>
-  <path class="checkmark-check" fill="none" d="M14 27l7 7 17-17"/>
-</svg>
-
-<h2>Anggota Terverifikasi</h2>
-
-</div>
-
-<div class="info">
-
-<div class="row">
-<b>Nama Anggota</b><br>
-${data.nama}
-</div>
-
-<div class="row">
-<b>Token</b><br>
-${data.token}
-</div>
-
-<div class="row">
-<b>Status</b><br>
-${data.status}
-</div>
-
-
-
-<div class="row">
-<b>Waktu Verifikasi</b><br>
-${new Date().toLocaleString('id-ID')}
-</div>
-
-</div>
-`;
-
-}else{
-
-document.getElementById("hasil").innerHTML=`
-
-<h2 class="invalid">
-❌ Tidak Terdaftar
-</h2>
-
-<p>
-Data anggota tidak ditemukan.
-</p>
-`;
-
-}
-
-});
 
 </script>
-
-</body>
-</html>
