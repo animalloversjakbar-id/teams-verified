@@ -110,38 +110,6 @@ h1{
     animation:stroke .4s ease forwards .8s;
 }
 
-.crossmark{
-    width:100px;
-    height:100px;
-    display:block;
-    margin:0 auto 15px;
-
-    filter:
-    drop-shadow(0 0 8px rgba(220,38,38,.5))
-    drop-shadow(0 0 20px rgba(220,38,38,.3));
-}
-
-.crossmark-circle{
-    stroke:#dc2626;
-    stroke-width:2;
-    stroke-miterlimit:10;
-    stroke-dasharray:166;
-    stroke-dashoffset:166;
-    animation:stroke .8s ease forwards;
-}
-
-.crossmark-line{
-    stroke:#dc2626;
-    stroke-width:3;
-    stroke-linecap:round;
-    stroke-dasharray:40;
-    stroke-dashoffset:40;
-    animation:stroke .4s ease forwards .8s;
-}
-
-
-    
-
 @keyframes stroke{
     to{
         stroke-dashoffset:0;
@@ -169,6 +137,9 @@ h1{
     <h1>
         ALJABAR<br>
         Animal Lovers Jakarta Barat
+        <span class="subtitle">
+
+        </span>
     </h1>
 
     <div id="hasil" class="loading">
@@ -207,42 +178,14 @@ fetch(api + "?t=" + encodeURIComponent(token))
     console.log(data);
 
     if(data.found){
-   if(
-    data.found &&
-    data.status &&
-    data.status.toLowerCase() === "aktif"
-){
-
-    document.getElementById("hasil").innerHTML = `
-
-    <div class="success-animation">
-
-        <svg class="checkmark"
-             xmlns="http://www.w3.org/2000/svg"
-             viewBox="0 0 52 52">
-
-            <circle
-                class="checkmark-circle"
-                cx="26"
-                cy="26"
-                r="25"
-                fill="none"/>
 
         document.getElementById("hasil").innerHTML = `
-            <path
-                class="checkmark-check"
-                fill="none"
-                d="M14 27l7 7 17-17"/>
 
         <div class="success-animation">
-        </svg>
 
             <svg class="checkmark"
                  xmlns="http://www.w3.org/2000/svg"
                  viewBox="0 0 52 52">
-        <h2 class="valid">
-            Anggota Terverifikasi
-        </h2>
 
                 <circle
                     class="checkmark-circle"
@@ -250,168 +193,55 @@ fetch(api + "?t=" + encodeURIComponent(token))
                     cy="26"
                     r="25"
                     fill="none"/>
-    </div>
 
                 <path
                     class="checkmark-check"
                     fill="none"
                     d="M14 27l7 7 17-17"/>
-    <div class="info">
 
             </svg>
-        <div class="row">
-            <b>Nama Anggota</b><br>
-            ${data.nama}
-        </div>
 
             <h2 class="valid">
                 Anggota Terverifikasi
             </h2>
-        <div class="row">
-            <b>Status</b><br>
-            ${data.status}
-        </div>
 
-        <div class="row">
-            <b>Waktu Verifikasi</b><br>
-            ${new Date().toLocaleString('id-ID')}
         </div>
 
         <div class="info">
-    </div>
-
-    `;
-
-}else if(data.found){
-
-    document.getElementById("hasil").innerHTML = `
-
-    <div class="success-animation">
-
-        <svg class="crossmark"
-             xmlns="http://www.w3.org/2000/svg"
-             viewBox="0 0 52 52">
-
-            <circle
-                class="crossmark-circle"
-                cx="26"
-                cy="26"
-                r="25"
-                fill="none"/>
-
-            <line
-                class="crossmark-line"
-                x1="16"
-                y1="16"
-                x2="36"
-                y2="36"/>
-
-            <line
-                class="crossmark-line"
-                x1="36"
-                y1="16"
-                x2="16"
-                y2="36"/>
-
-        </svg>
-
-        <h2 class="invalid">
-            Keanggotaan Tidak Aktif
-        </h2>
 
             <div class="row">
                 <b>Nama Anggota</b><br>
                 ${data.nama}
             </div>
-    </div>
 
             <div class="row">
                 <b>Status</b><br>
                 ${data.status}
             </div>
-    <div class="info">
 
             <div class="row">
                 <b>Waktu Verifikasi</b><br>
                 ${new Date().toLocaleString('id-ID')}
             </div>
-        <div class="row">
-            <b>Nama Anggota</b><br>
-            ${data.nama}
-        </div>
 
-        <div class="row">
-            <b>Status</b><br>
-            ${data.status}
         </div>
         `;
 
     }else{
-        <div class="row">
-            <b>Waktu Verifikasi</b><br>
-            ${new Date().toLocaleString('id-ID')}
-        </div>
 
         document.getElementById("hasil").innerHTML = `
             <h2 class="invalid">
                 ❌ Tidak Terdaftar
             </h2>
-    </div>
 
             <p style="margin-top:10px;">
                 Data anggota tidak ditemukan.
             </p>
         `;
-    `;
 
     }
-}else{
-
-    document.getElementById("hasil").innerHTML = `
-
-    <div class="success-animation">
-
-        <svg class="crossmark"
-             xmlns="http://www.w3.org/2000/svg"
-             viewBox="0 0 52 52">
-
-            <circle
-                class="crossmark-circle"
-                cx="26"
-                cy="26"
-                r="25"
-                fill="none"/>
-
-            <line
-                class="crossmark-line"
-                x1="16"
-                y1="16"
-                x2="36"
-                y2="36"/>
-
-            <line
-                class="crossmark-line"
-                x1="36"
-                y1="16"
-                x2="16"
-                y2="36"/>
-
-        </svg>
-
-        <h2 class="invalid">
-            Tidak Terdaftar
-        </h2>
 
 })
-        <p style="margin-top:10px;">
-            Data anggota tidak ditemukan.
-        </p>
-
-    </div>
-
-    `;
-
-}
 
 .catch(error => {
 
