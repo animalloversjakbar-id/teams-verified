@@ -164,8 +164,13 @@ new URLSearchParams(window.location.search);
 const id =
 params.get("id");
 
-fetch(api + "?id=" + id)
+fetch(api + "?t=" + token)
+.then(res => res.json())
+.then(data => {
 
+   console.log(data);
+
+});
 .then(res => res.json())
 
 .then(data => {
