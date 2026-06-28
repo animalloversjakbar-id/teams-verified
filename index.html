@@ -160,19 +160,27 @@
 
         const api = "https://script.google.com/macros/s/AKfycbwH9hfuk3nifyLrjbWA1Ai0d7PrN6OLg66pmuhtK0AiSZlxEuFsztIwn4Vd4zibaCYaVA/exec";
         
+        // --- 1. AMBIL TOKEN (Bisa dari ?t= atau dari ujung URL path) --
         // --- 1. AMBIL TOKEN (Bisa dari ?t= atau dari ujung URL path) ---
-        const urlParams = new URLSearchParams(window.location.search);
-        let token = urlParams.get("t");
+const urlParams = new URLSearchParams(window.location.search);
+let token = urlParams.get("t");
 
-        if (!token) {
-            const pathParts = window.location.pathname.split("/").filter(Boolean);
-            // Jika part terakhir bukan nama repo (teams-verified), maka ambil sebagai token
-            if (pathParts.length > 0 && pathParts[pathParts.length - 1] !== "teams-verified") {
-                token = pathParts[pathParts.length - 1];
-            }
-        }
+if (!token) {
+    const pathParts = window.location.pathname.split("/").filter(Boolean);
+    // Jika part terakhir bukan nama repo (teams-verified), maka ambil sebagai token
+    if (pathParts.length > 0 && pathParts[pathParts.length - 1] !== "teams-verified") {
+        token = pathParts[pathParts.length - 1];
+    }
+}
 
-        console.log("Token ditemukan:", token);
+console.log("Token ditemukan:", token);
+
+// --- SEGERA SEMBUNYIKAN/BERSIHKAN URL AGAR TOKEN HILANG ---
+if (token) {
+    // Menghapus token dari address bar tanpa me-refresh halaman
+    const cleanPath = window.location.pathname.replace(token, "").replace(/\/$/, "");
+    window.history.replaceState({}, document.title, cleanPath);
+}
 
         // --- 2. JALANKAN PROSES VALIDASI ---
         if (!token) {
