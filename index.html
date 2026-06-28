@@ -125,6 +125,27 @@
 <body>
 
     <div class="card">
+
+<button onclick="startScanner()" style="
+    width:100%;
+    padding:12px;
+    margin-top:15px;
+    border:none;
+    border-radius:10px;
+    background:#1e3a8a;
+    color:white;
+    font-size:16px;
+    cursor:pointer;
+">
+📱 Scan QR Member
+</button>
+
+<div id="reader" style="margin-top:20px;"></div>
+
+
+
+
+        
         <div class="logo-container">
             <img src="Logo Aljabar - Stoke.png" alt="Logo ALJABAR">
         </div>
@@ -245,6 +266,37 @@
                 });
         }
     </script>
+
+<script src="https://unpkg.com/html5-qrcode"></script>
+
+<script>
+function startScanner() {
+    const reader = new Html5Qrcode("reader");
+
+    reader.start(
+        { facingMode: "environment" }, // kamera belakang
+        {
+            fps: 10,
+            qrbox: 250
+        },
+        (decodedText) => {
+            // 🔥 kalau QR kebaca
+            reader.stop();
+
+            console.log("QR:", decodedText);
+
+            // redirect ke link hasil scan
+            window.location.href = decodedText;
+        },
+        (errorMessage) => {
+            // ignore error scan
+        }
+    ).catch(err => {
+        alert("Gagal buka kamera: " + err);
+    });
+}
+</script>
+    
 </body>
 
 </html>
