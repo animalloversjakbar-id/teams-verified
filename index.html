@@ -235,5 +235,54 @@
         }
     </script>
 
+
+<script>
+  // ambil token dari URL (baik dari ?t= atau dari path)
+  const urlParams = new URLSearchParams(window.location.search);
+  let token = urlParams.get("t");
+
+  // kalau tidak ada ?t=, ambil dari path
+  if (!token) {
+    const pathParts = window.location.pathname.split("/");
+    token = pathParts[pathParts.length - 1];
+  }
+
+  console.log("Token:", token);
+
+  // daftar token valid (copy dari punyamu)
+  const validTokens = [
+    "ALJ9X7K2P4M8R1T6Q5W3Y8Z",
+    "ALJ4N8V2K7Q1M5X9R3T6P2C",
+    "ALJ7P3X9M2R8K5Q1V4T6Y8N",
+    "ALJ2R8Q5X1N7M4T9K3P6V2Y",
+    "ALJ8M4K1P7X2R9Q5T3V6N8Y",
+    "ALJ5T2Q8R4M1X7P9K3V6Y2N",
+    "ALJ3X7M2Q8P5R1T9K4V6N8Y",
+    "ALJ1K8P4T7Q2X9M5R3V6Y2N",
+    "ALJ6Q2R8X4M1P7T9K3V5Y8N",
+    "ALJ4P7M1X8Q2R5T9K3V6Y2N",
+    "ALJ8R3Q7M2P5X1T9K4V6Y2N",
+    "ALJ2X9P4R7M1Q8T5K3V6Y2N",
+    "ALJ7M1Q8X4P2R5T9K3V6Y2N",
+    "ALJ5P2X7R1M8Q4T9K3V6Y2N",
+    "ALJ9Q4M1X8P2R7T5K3V6Y2N",
+    "ALJ1X7Q4R8M2P5T9K3V6Y2N",
+    "ALJ6M2P8X4Q1R7T9K3V5Y2N",
+    "ALJ4R9X1M7P2Q8T5K3V6Y2N",
+    "ALJ8X3Q7P1M4R9T5K2V6Y8N"
+  ];
+
+  // validasi
+  if (validTokens.includes(token)) {
+    document.body.innerHTML = "<h1>✅ VERIFIED ALJABAR</h1>";
+  } else {
+    document.body.innerHTML = "<h1>❌ TIDAK VALID</h1>";
+  }
+
+  // hapus parameter dari URL biar bersih
+  window.history.replaceState({}, document.title, window.location.pathname);
+</script>
+
+    
 </body>
 </html>
