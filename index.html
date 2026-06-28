@@ -236,6 +236,17 @@
     </script>
 
 
+    <script>
+  // ambil redirect dari 404
+  if (sessionStorage.redirect) {
+    const redirect = sessionStorage.redirect;
+    delete sessionStorage.redirect;
+    window.history.replaceState(null, null, redirect);
+  }
+</script>
+
+    
+
 <script>
   // ambil token dari URL (baik dari ?t= atau dari path)
   const urlParams = new URLSearchParams(window.location.search);
