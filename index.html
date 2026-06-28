@@ -58,7 +58,6 @@
             color: #16a34a;
         }
 
-        /* Warna baru khusus untuk status Tidak Aktif (Kuning/Oranye Tua) */
         .warning {
             color: #eab308; 
         }
@@ -141,6 +140,14 @@
     </div>
 
     <script>
+        if (sessionStorage.redirect) {
+            const redirect = sessionStorage.redirect;
+            delete sessionStorage.redirect;
+            window.history.replaceState(null, null, redirect);
+        }
+    </script>
+
+    <script>
         function escapeHTML(str) {
             if (!str) return '';
             return str.toString()
@@ -152,17 +159,29 @@
         }
 
         const api = "https://script.google.com/macros/s/AKfycbwH9hfuk3nifyLrjbWA1Ai0d7PrN6OLg66pmuhtK0AiSZlxEuFsztIwn4Vd4zibaCYaVA/exec";
-        const params = new URLSearchParams(window.location.search);
-        const token = params.get("t");
+        
+        // --- 1. AMBIL TOKEN (Bisa dari ?t= atau dari ujung URL path) ---
+        const urlParams = new URLSearchParams(window.location.search);
+        let token = urlParams.get("t");
 
-        console.log("Token:", token);
+        if (!token) {
+            const pathParts = window.location.pathname.split("/").filter(Boolean);
+            // Jika part terakhir bukan nama repo (teams-verified), maka ambil sebagai token
+            if (pathParts.length > 0 && pathParts[pathParts.length - 1] !== "teams-verified") {
+                token = pathParts[pathParts.length - 1];
+            }
+        }
 
+        console.log("Token ditemukan:", token);
+
+        // --- 2. JALANKAN PROSES VALIDASI ---
         if (!token) {
             document.getElementById("hasil").innerHTML = `
                 <h2 class="invalid">❌ Token tidak ditemukan</h2>
                 <p style="margin-top:10px;">Gunakan link verifikasi resmi yang menyertakan token.</p>
             `;
         } else {
+            // Lakukan fetch data ke Google Sheets API kamu
             fetch(api + "?t=" + encodeURIComponent(token))
                 .then(response => {
                     if (!response.ok) {
@@ -171,12 +190,10 @@
                     return response.json();
                 })
                 .then(data => {
-                    console.log(data);
+                    console.log("Data API:", data);
 
-                    // 1. KONDISI: Data ditemukan di Google Sheets
+                    // KONDISI A: Data ditemukan di Google Sheets
                     if (data.found) {
-                        
-                        // Cek apakah statusnya AKTIF
                         if (data.status === "Aktif") {
                             document.getElementById("hasil").innerHTML = `
                                 <div class="success-animation">
@@ -186,30 +203,24 @@
                                     </svg>
                                     <h2 class="valid">Anggota Terverifikasi</h2>
                                 </div>
-
                                 <div class="info">
                                     <div class="row"><b>Nama Anggota</b><br>${escapeHTML(data.nama)}</div>
                                     <div class="row"><b>Status</b><br><span class="valid"><b>${escapeHTML(data.status)}</b></span></div>
                                     <div class="row"><b>Waktu Verifikasi</b><br>${new Date().toLocaleString('id-ID')}</div>
                                 </div>
                             `;
-                        
-                        // Cek jika statusnya TIDAK AKTIF
                         } else if (data.status === "Tidak Aktif") {
                             document.getElementById("hasil").innerHTML = `
                                 <div class="success-animation">
-                                    <h2 class="warning">⚠️ Anggota Tidak Terverifikasi</h2>
+                                    <h2 class="warning">⚠️ Anggota Tidak Aktif</h2>
                                     <p style="margin-top:10px; color:#64748b;">Masa keanggotaan Anda telah berakhir atau dinonaktifkan.</p>
                                 </div>
-
                                 <div class="info">
                                     <div class="row"><b>Nama Anggota</b><br>${escapeHTML(data.nama)}</div>
                                     <div class="row"><b>Status</b><br><span class="invalid"><b>${escapeHTML(data.status)}</b></span></div>
                                     <div class="row"><b>Waktu Verifikasi</b><br>${new Date().toLocaleString('id-ID')}</div>
                                 </div>
                             `;
-                        
-                        // Antisipasi jika ada status lain selain Aktif / Tidak Aktif
                         } else {
                             document.getElementById("hasil").innerHTML = `
                                 <h2 class="invalid">❌ Status Tidak Dikenali</h2>
@@ -217,7 +228,7 @@
                             `;
                         }
 
-                    // 2. KONDISI: Data TIDAK ditemukan sama sekali di Google Sheets
+                    // KONDISI B: Data TIDAK ditemukan di Google Sheets
                     } else {
                         document.getElementById("hasil").innerHTML = `
                             <h2 class="invalid">❌ Tidak Terdaftar</h2>
@@ -234,66 +245,6 @@
                 });
         }
     </script>
-
-
-    <script>
-  // ambil redirect dari 404
-  if (sessionStorage.redirect) {
-    const redirect = sessionStorage.redirect;
-    delete sessionStorage.redirect;
-    window.history.replaceState(null, null, redirect);
-  }
-</script>
-
-    
-
-<script>
-  // ambil token dari URL (baik dari ?t= atau dari path)
-  const urlParams = new URLSearchParams(window.location.search);
-  let token = urlParams.get("t");
-
-  // kalau tidak ada ?t=, ambil dari path
-  if (!token) {
-    const pathParts = window.location.pathname.split("/");
-    token = pathParts[pathParts.length - 1];
-  }
-
-  console.log("Token:", token);
-
-  // daftar token valid (copy dari punyamu)
-  const validTokens = [
-    "ALJ9X7K2P4M8R1T6Q5W3Y8Z",
-    "ALJ4N8V2K7Q1M5X9R3T6P2C",
-    "ALJ7P3X9M2R8K5Q1V4T6Y8N",
-    "ALJ2R8Q5X1N7M4T9K3P6V2Y",
-    "ALJ8M4K1P7X2R9Q5T3V6N8Y",
-    "ALJ5T2Q8R4M1X7P9K3V6Y2N",
-    "ALJ3X7M2Q8P5R1T9K4V6N8Y",
-    "ALJ1K8P4T7Q2X9M5R3V6Y2N",
-    "ALJ6Q2R8X4M1P7T9K3V5Y8N",
-    "ALJ4P7M1X8Q2R5T9K3V6Y2N",
-    "ALJ8R3Q7M2P5X1T9K4V6Y2N",
-    "ALJ2X9P4R7M1Q8T5K3V6Y2N",
-    "ALJ7M1Q8X4P2R5T9K3V6Y2N",
-    "ALJ5P2X7R1M8Q4T9K3V6Y2N",
-    "ALJ9Q4M1X8P2R7T5K3V6Y2N",
-    "ALJ1X7Q4R8M2P5T9K3V6Y2N",
-    "ALJ6M2P8X4Q1R7T9K3V5Y2N",
-    "ALJ4R9X1M7P2Q8T5K3V6Y2N",
-    "ALJ8X3Q7P1M4R9T5K2V6Y8N"
-  ];
-
-  // validasi
-  if (validTokens.includes(token)) {
-    document.body.innerHTML = "<h1>✅ VERIFIED ALJABAR</h1>";
-  } else {
-    document.body.innerHTML = "<h1>❌ TIDAK VALID</h1>";
-  }
-
-  // hapus parameter dari URL biar bersih
-  window.history.replaceState({}, document.title, window.location.pathname);
-</script>
-
-    
 </body>
+
 </html>
